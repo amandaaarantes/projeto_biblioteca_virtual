@@ -1,0 +1,25 @@
+{
+  "hash": "8580ad65",
+  "configHash": "d9cb46d5",
+  "lockfileHash": "efb18da7",
+  "browserHash": "3ad68db3",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "4aa01111",
+      "needsInterop": true
+    },
+    "uuid": {
+      "src": "../../node_modules/uuid/dist/index.js",
+      "file": "uuid.js",
+      "fileHash": "0f2e5e22",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-BUSYA2B4": {
+      "file": "chunk-BUSYA2B4.js"
+    }
+  }
+}
