@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { type User, type UserFilters } from '../../types/User'; 
 import { getUsers, deleteUser } from '../../services/userService'; 
 import UserForm from './UserForm'; 
-// OBS: Você deve garantir que o CSS contendo as classes abaixo está carregado globalmente.
 
 const UserList: React.FC = () => {
     const [userList, setUserList] = useState<User[]>([]);
@@ -10,19 +9,15 @@ const UserList: React.FC = () => {
     const [filters, setFilters] = useState<UserFilters>({});
     const [error, setError] = useState<string | null>(null);
     
-    // NOVO: Controle de estado para o formulário e edição
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [userToEdit, setUserToEdit] = useState<User | undefined>(undefined); 
 
-    // MOCK: Perfil para controle de acesso (Apenas Admin pode excluir)
-    const currentUserProfile = 'Administrador' as const; // MOCKADO como Admin para testar exclusão
+    const currentUserProfile = 'Administrador' as const; 
 
-    // Implementação de Consultar Usuário [RF2]
     const fetchUsers = async () => {
         setLoading(true);
         setError(null);
         try {
-            // [RF2] Consultar Usuário: Usa os filtros da Tabela 2
             const data = await getUsers(filters); 
             setUserList(data);
         } catch (err) {
@@ -32,21 +27,17 @@ const UserList: React.FC = () => {
         }
     };
 
-    // Função para abrir o formulário em modo de Cadastro [RF1]
     const handleAdd = () => {
-        setUserToEdit(undefined); // Garante que é um novo cadastro
+        setUserToEdit(undefined); 
         setIsFormOpen(true);
     }
     
-    // Função para abrir o formulário em modo de Edição [RF3]
     const handleEdit = (user: User) => {
         setUserToEdit(user);
         setIsFormOpen(true);
     }
 
-    // Implementação de Excluir Usuário [RF4] - Apenas Administrador
     const handleDelete = async (id: string, nickname: string) => {
-        // Atores: Administrador pode excluir [RF4]
         if (currentUserProfile !== 'Administrador') { 
             alert("Apenas Administradores podem excluir usuários.");
             return;
@@ -54,7 +45,7 @@ const UserList: React.FC = () => {
         if (window.confirm(`Confirma a exclusão do usuário "${nickname}"?`)) { 
             try {
                 await deleteUser(id);
-                fetchUsers(); // Recarrega a lista
+                fetchUsers(); 
                 alert("Usuário excluído com sucesso.");
             } catch (err: any) {
                 alert(`Erro ao excluir: ${err.message}`);
@@ -62,59 +53,61 @@ const UserList: React.FC = () => {
         }
     };
     
-    // Recarrega a lista quando o componente monta ou quando os filtros mudam
     useEffect(() => {
         fetchUsers();
     }, [filters.nome, filters.nickname]); 
+
+    // Estilo do botão de Excluir padronizado
+    const defaultBorderColor = '#6c757d'; 
+    const deleteButtonStyle: React.CSSProperties = {
+        padding: '4px 8px',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        backgroundColor: '#f8f9fa', 
+        border: `1px solid ${defaultBorderColor}`,
+        color: defaultBorderColor, 
+    };
 
     return (
         <div className="user-list">
             <h3>Gerenciamento de Usuários</h3>
 
-            {/* Renderização Condicional do Formulário (Inserir/Editar) */}
             {isFormOpen && (
                 <UserForm
                     userToEdit={userToEdit}
-                    onCancel={() => setIsFormOpen(false)} // Fecha o formulário
+                    onCancel={() => setIsFormOpen(false)} 
                     onUserSaved={() => {
-                        setIsFormOpen(false); // Fecha o formulário após salvar
-                        fetchUsers(); // Recarrega a lista para ver a mudança
+                        setIsFormOpen(false); 
+                        fetchUsers(); 
                     }}
                 />
             )}
             
-            {/* --- ÁREA DE FILTROS CORRIGIDA (Ocupando uma linha) --- 
-                
-                Usamos o mesmo estilo de grid do BookList para alinhar os campos 
-                e o botão na mesma linha.
-            */}
+            {/* --- ÁREA DE FILTROS --- */}
             <div style={{ 
                 marginBottom: '20px', 
                 display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', // O mesmo grid do BookList
+                gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', 
                 gap: '10px',
                 alignItems: 'end'
             }}>
                 <input 
                     placeholder="Buscar por Nome do Usuário" 
                     onChange={(e) => setFilters({...filters, nome: e.target.value})} 
-                    style={{ width: '100%', padding: '8px' }} // Estilo do BookList
+                    style={{ width: '100%', padding: '8px' }}
                 />
                 
                 <input 
                     placeholder="Buscar por Apelido" 
                     onChange={(e) => setFilters({...filters, nickname: e.target.value})} 
-                    style={{ width: '100%', padding: '8px' }} // Estilo do BookList
+                    style={{ width: '100%', padding: '8px' }}
                 />
                 
-                {/* Divs vazios para empurrar o botão para a direita, 
-                    replicando o comportamento de 4 campos + 1 botão do BookList 
-                */}
                 <div></div>
                 <div></div>
 
                 <button 
-                    onClick={handleAdd} // Abre o formulário de Cadastro [RF1]
+                    onClick={handleAdd} 
                     style={{ 
                         padding: '8px 15px', 
                         cursor: 'pointer', 
@@ -123,7 +116,7 @@ const UserList: React.FC = () => {
                         border: 'none',
                         borderRadius: '4px',
                         height: '35px'
-                    }} // Estilo do BookList
+                    }}
                 >
                     + Novo Usuário
                 </button>
@@ -159,7 +152,6 @@ const UserList: React.FC = () => {
                                         padding: '4px 8px',
                                         borderRadius: '4px',
                                         fontSize: '0.85em',
-                                        // Estilos de status copiados do BookList, adaptados para Perfil
                                         backgroundColor: user.perfil === 'Administrador' ? '#d4edda' : '#fff3cd',
                                         color: user.perfil === 'Administrador' ? '#155724' : '#856404'
                                     }}>
@@ -167,19 +159,21 @@ const UserList: React.FC = () => {
                                     </span>
                                 </td>
                                 <td style={{ padding: '10px' }}>
-                                    {/* Ajustando os botões para o estilo do BookList */}
-                                    <button 
-                                        onClick={() => handleEdit(user)} 
-                                        style={{ marginRight: '5px', cursor: 'pointer' }}
-                                    >
-                                        Editar
-                                    </button>
-                                    <button 
-                                        onClick={() => handleDelete(user.id, user.nickname)} 
-                                        style={{ cursor: 'pointer', color: 'white' }}
-                                    >
-                                        Excluir
-                                    </button>
+                                    {/* CONTÊINER FLEX PARA OS BOTÕES */}
+                                    <div style={{ display: 'flex', gap: '5px' }}>
+                                        <button 
+                                            onClick={() => handleEdit(user)} 
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            Editar
+                                        </button>
+                                        <button 
+                                            onClick={() => handleDelete(user.id, user.nickname)} 
+                                            style={deleteButtonStyle}
+                                        >
+                                            Excluir
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}

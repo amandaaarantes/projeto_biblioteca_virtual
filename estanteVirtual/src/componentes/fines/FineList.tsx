@@ -40,6 +40,17 @@ const FineList: React.FC = () => {
         setIsFormOpen(true);
     }
 
+    // Estilo do botão de Excluir padronizado
+    const defaultBorderColor = '#6c757d'; 
+    const deleteButtonStyle: React.CSSProperties = {
+        padding: '4px 8px',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        backgroundColor: '#f8f9fa', 
+        border: `1px solid ${defaultBorderColor}`,
+        color: defaultBorderColor, 
+    };
+
     return (
         <div className="fine-list">
             <h3>Gerenciamento de Multas</h3>
@@ -121,8 +132,8 @@ const FineList: React.FC = () => {
                             <th style={{ padding: '10px' }}>Cód. Emp.</th>
                             <th style={{ padding: '10px' }}>Nickname</th>
                             <th style={{ padding: '10px' }}>Valor</th>
-                            <th style={{ padding: '10px' }}>Data Início</th> {/* Campo Novo */}
-                            <th style={{ padding: '10px' }}>Data Pagamento</th> {/* Campo Novo */}
+                            <th style={{ padding: '10px' }}>Data Início</th> 
+                            <th style={{ padding: '10px' }}>Data Pagamento</th> 
                             <th style={{ padding: '10px' }}>Status</th>
                             <th style={{ padding: '10px', width: '150px' }}>Ações</th>
                         </tr>
@@ -148,12 +159,15 @@ const FineList: React.FC = () => {
                                     </span>
                                 </td>
                                 <td style={{ padding: '10px' }}>
-                                    <button onClick={() => { setEditItem(f); setIsFormOpen(true); }} style={{ marginRight: '5px', cursor: 'pointer' }}>
-                                        Editar
-                                    </button>
-                                    <button onClick={() => handleDelete(f.id)} style={{ cursor: 'pointer', color: 'white' }}>
-                                        Excluir
-                                    </button>
+                                    {/* CONTÊINER FLEX PARA OS BOTÕES */}
+                                    <div style={{ display: 'flex', gap: '5px' }}>
+                                        <button onClick={() => { setEditItem(f); setIsFormOpen(true); }} style={{ cursor: 'pointer' }}>
+                                            Editar
+                                        </button>
+                                        <button onClick={() => handleDelete(f.id)} style={deleteButtonStyle}>
+                                            Excluir
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}

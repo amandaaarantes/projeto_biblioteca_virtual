@@ -3,16 +3,16 @@ import React from 'react';
 interface LayoutProps {
   // O conteúdo principal da tela
   children: React.ReactNode; 
-  // Atualizado para aceitar 'loans' e 'fines'
-  onNavigate: (screen: 'users' | 'books' | 'loans' | 'fines') => void; 
-  // Atualizado para aceitar 'loans' e 'fines'
-  currentScreen: 'users' | 'books' | 'loans' | 'fines'; 
+  // Atualizado para aceitar 'loans', 'fines' e 'reviews'
+  onNavigate: (screen: 'users' | 'books' | 'loans' | 'fines' | 'reviews') => void; 
+  // Atualizado para aceitar 'loans', 'fines' e 'reviews'
+  currentScreen: 'users' | 'books' | 'loans' | 'fines' | 'reviews'; 
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, onNavigate, currentScreen }) => {
 
   // Função auxiliar para estilizar os botões dinamicamente
-  const getButtonStyle = (screenName: 'users' | 'books' | 'loans' | 'fines') => ({
+  const getButtonStyle = (screenName: 'users' | 'books' | 'loans' | 'fines' | 'reviews') => ({
     marginRight: '10px', 
     padding: '8px 12px',
     cursor: 'pointer',
@@ -63,6 +63,15 @@ const Layout: React.FC<LayoutProps> = ({ children, onNavigate, currentScreen }) 
           >
             Multas
           </button>
+          
+          {/* NOVO BOTÃO DE NAVEGAÇÃO */}
+          <button 
+            onClick={() => onNavigate('reviews')}
+            style={getButtonStyle('reviews')}
+          >
+            Avaliações
+          </button>
+          
         </nav>
       </header>
       

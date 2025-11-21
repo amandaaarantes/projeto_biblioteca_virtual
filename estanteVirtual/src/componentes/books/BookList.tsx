@@ -60,6 +60,17 @@ const BookList: React.FC = () => {
     useEffect(() => {
         fetchBooks();
     }, [filters.titulo, filters.autor, filters.dataPublicacao, filters.codigoIdentificador]); 
+    
+    // Estilo do botão de Excluir padronizado
+    const defaultBorderColor = '#6c757d'; 
+    const deleteButtonStyle: React.CSSProperties = {
+        padding: '4px 8px',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        backgroundColor: '#f8f9fa', 
+        border: `1px solid ${defaultBorderColor}`,
+        color: defaultBorderColor, 
+    };
 
     return (
         <div className="book-list">
@@ -150,7 +161,7 @@ const BookList: React.FC = () => {
                         <tr style={{ backgroundColor: '#f2f2f2', textAlign: 'left' }}>
                             <th style={{ padding: '10px' }}>Cód.</th>
                             <th style={{ padding: '10px' }}>Título</th>
-                            <th style={{ padding: '10px' }}>Descrição</th> {/* Novo Campo */}
+                            <th style={{ padding: '10px' }}>Descrição</th> 
                             <th style={{ padding: '10px' }}>Autor</th>
                             <th style={{ padding: '10px' }}>Loc. Física</th>
                             <th style={{ padding: '10px' }}>Ano</th>
@@ -181,12 +192,21 @@ const BookList: React.FC = () => {
                                     </span>
                                 </td>
                                 <td style={{ padding: '10px' }}>
-                                    <button onClick={() => handleEdit(book)} style={{ marginRight: '5px', cursor: 'pointer' }}>
-                                        Editar
-                                    </button>
-                                    <button onClick={() => handleDelete(book.id, book.titulo)} style={{ cursor: 'pointer', color: 'white' }}>
-                                        Excluir
-                                    </button>
+                                    {/* CONTÊINER FLEX PARA OS BOTÕES */}
+                                    <div style={{ display: 'flex', gap: '5px' }}>
+                                        <button 
+                                            onClick={() => handleEdit(book)} 
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            Editar
+                                        </button>
+                                        <button 
+                                            onClick={() => handleDelete(book.id, book.titulo)} 
+                                            style={deleteButtonStyle}
+                                        >
+                                            Excluir
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}

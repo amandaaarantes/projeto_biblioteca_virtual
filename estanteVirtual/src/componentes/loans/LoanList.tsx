@@ -8,7 +8,6 @@ const LoanList: React.FC = () => {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editItem, setEditItem] = useState<Loan | undefined>(undefined);
     
-    // Estado para os 4 filtros da Tabela 6
     const [filters, setFilters] = useState({
         codigo: '',
         nickname: '',
@@ -17,16 +16,13 @@ const LoanList: React.FC = () => {
     });
 
     const fetchLoans = async () => {
-        // Passa todos os filtros para o serviço [RF10]
         const data = await getLoans(filters);
         setLoans(data);
     };
 
-    // Atualiza a lista sempre que qualquer filtro mudar
     useEffect(() => { fetchLoans(); }, [filters]);
 
     const handleDelete = async (loan: Loan) => {
-        // [RF12] Regra de negócio: Não excluir se estiver atrasado [cite: 235]
         if (loan.status === 'Atrasado') {
             alert("Não é possível excluir empréstimo Atrasado.");
             return;
@@ -43,6 +39,32 @@ const LoanList: React.FC = () => {
         setEditItem(undefined); 
         setIsFormOpen(true);
     }
+    
+    // ESTILOS PADRÃO PARA ALINHAMENTO E BOTÕES
+    const defaultBorderColor = '#6c757d'; 
+    const labelStyle: React.CSSProperties = {
+        fontSize: '12px', 
+        fontWeight: 'bold',
+        display: 'block', 
+        marginBottom: '4px' 
+    };
+    const inputStyle: React.CSSProperties = {
+        width: '100%', 
+        padding: '8px', 
+        height: '35px', 
+        boxSizing: 'border-box' 
+    };
+    
+    // Estilo do botão de ação da tabela (Excluir)
+    const deleteButtonStyle: React.CSSProperties = {
+        padding: '4px 8px',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        backgroundColor: '#f8f9fa', 
+        border: `1px solid ${defaultBorderColor}`,
+        color: defaultBorderColor, 
+    };
+
 
     return (
         <div className="loan-list">
@@ -97,14 +119,14 @@ const LoanList: React.FC = () => {
                     />
                 </div>
 
-                {/* Filtro 4: Data do Empréstimo */}
+                {/* Filtro 4: Data do Empréstimo - APLICAÇÃO DOS ESTILOS */}
                 <div>
-                    <label style={{fontSize: '12px', fontWeight: 'bold'}}>Data Empréstimo:</label>
+                    <label style={labelStyle}>Data Empréstimo:</label>
                     <input 
                         type="date"
                         value={filters.data}
                         onChange={(e) => setFilters({...filters, data: e.target.value})} 
-                        style={{ width: '100%', padding: '8px' }}
+                        style={inputStyle} 
                     />
                 </div>
 
@@ -134,7 +156,7 @@ const LoanList: React.FC = () => {
                             <th style={{ padding: '10px' }}>Livro (Cód)</th>
                             <th style={{ padding: '10px' }}>Data Emp.</th>
                             <th style={{ padding: '10px' }}>Prazo</th>
-                            <th style={{ padding: '10px' }}>Devolução Real</th> {/* Campo Adicionado */}
+                            <th style={{ padding: '10px' }}>Devolução Real</th> 
                             <th style={{ padding: '10px' }}>Status</th>
                             <th style={{ padding: '10px', width: '150px' }}>Ações</th>
                         </tr>
@@ -164,12 +186,15 @@ const LoanList: React.FC = () => {
                                     </span>
                                 </td>
                                 <td style={{ padding: '10px' }}>
-                                    <button onClick={() => { setEditItem(l); setIsFormOpen(true); }} style={{ marginRight: '5px', cursor: 'pointer' }}>
-                                        Editar
-                                    </button>
-                                    <button onClick={() => handleDelete(l)} style={{ cursor: 'pointer', color: 'white' }}>
-                                        Excluir
-                                    </button>
+                                    {/* CONTÊINER FLEX PARA OS BOTÕES */}
+                                    <div style={{ display: 'flex', gap: '5px' }}>
+                                        <button onClick={() => { setEditItem(l); setIsFormOpen(true); }} style={{ cursor: 'pointer' }}>
+                                            Editar
+                                        </button>
+                                        <button onClick={() => handleDelete(l)} style={deleteButtonStyle}>
+                                            Excluir
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
